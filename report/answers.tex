@@ -14,7 +14,7 @@
 \usepackage[export]{adjustbox}
 \usepackage{sectsty}
 \usepackage{enumitem}
-\renewcommand{\thesubsubsection}{(\arabic{subsubsection})}
+\renewcommand{\thesubsubsection}{(\roman{subsubsection})}
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage[perpage]{footmisc}
@@ -77,7 +77,6 @@ Yes - $CEHFG$ is now blocked because of $E$. \\
 \textbf{(j) $B \perp I \vert J$ ?} \\
 No - $BGFI$ is not blocked as descendent of Head-Head node $G$ is $J$. \\
 
-
 \subsection{Probability distribution}
 \begin{equation*}
     \begin{aligned}
@@ -85,7 +84,6 @@ No - $BGFI$ is not blocked as descendent of Head-Head node $G$ is $J$. \\
                                  & = \mathbb{P}(A) \mathbb{P}(B|A) \mathbb{P}(C|A) \mathbb{P}(D|A) \mathbb{P}(E|C) \mathbb{P}(F|D) \mathbb{P}(G|B,D,F) \mathbb{P}(H|E,F) \mathbb{P}(I|F) \mathbb{P}(J|F,G)
     \end{aligned}
 \end{equation*}
-
 
 \newpage
 \subsection{Number of parameters required to learn the probability distribution}
@@ -124,7 +122,7 @@ Conditional probability term for $I$ would require zero parameter as $P(I=1|F=1)
 
 
 \newpage
-\section{CS337: CNN Theory Questions}
+\section{CS 337: CNN Theory Questions}
 \subsection{Task 1}
 Usually a CNN based network has multiple small kernels (usually 3 or 5 in size) at each level which extract features. \\
 In Fully connected Neural network, the first layer is linear with respect to the input and the complexity increases as we go forward. \\
@@ -146,17 +144,15 @@ To prevent this, we perform data augmentation, i.e. we provide same images with 
 
 For the given three pictures, the network would extract features like curves and shapes. The pooling layers and the fully connected layer would evaluate the first and last image (car images) as same as they would detect features which are similar to what it has learnt to classify as car. For the bike image, it will evaluate as bike as it's features match those of training set of bike and is different from other vehicles like car. The soft-max layer at the end would output the most confident object detected which would be car, bike, car respectively.
 
-
 \newpage
 \subsection{Task 2}
 By ``detect different object'', I am simplifying the task and interpreting it as given that the image has $K$ out of $N$ objects, we are asked to identify the $K$ objects. \\
-This can be handled by changing the last layer from soft-max layer (returns one-hot encoding of size N) to layer which returns a vector of size N where each object detected is marked with 1 and rest 0. \\
+This can be handled by changing the last layer after soft-max layer which currently returns predicts from the soft-max layer to layer which returns a vector of size N where each object detected is marked with 1 and rest 0. \\
 We can retrain the model, the objects which are detected would have high values in second last layer and which can then be converted to the required vector. \\
 The limitation of the above network is that some objects might dominate and may cause noisy detection in some other object classifiers and may give inaccurate results. Like, a truck is likely to give some noisy value to the bus classifier as well. So an image with two trucks and one bike may cause the noise in bus classifier to make it seem like truck and bus are present and not truck and bike. \\
 
 If we are asked to detect objects and not given number of objects present in the image, then we can use Region-based CNN (RCNN). As the images aren't overlapping, we don't have to worry about a region giving multiple objects. \\
 The major challenge of this approach is efficiently defining regions of interest (RoIs). This approach is slow for training as well as inference - faster RCNN models have been proposed to tackle this issue. \\
-
 
 \subsection{Task 3}
 One simple approach is simply extend the model in Task 2 and train the network to classify partial images of an object correctly. RCNN would be better here as each object would take small portion of the image and so finding RoIs would be easier with heat-maps. This however would reduce models accuracy a lot and would require a lot of data to prevent over-fitting. \\
@@ -164,6 +160,15 @@ One simple approach is simply extend the model in Task 2 and train the network t
 An approach proposed in an IEEE 2017 paper\footnote{Increasing CNN Robustness to Occlusions by Reducing Filter Support, Elad Osherov and Michael Lindenbaum, \url{https://ieeexplore.ieee.org/document/8237329}} showed training with proper dataset and applying small spatial support using Regularization helps in detecting objects with occlusions. \\
 
 A recent paper submitted to arXiv\footnote{Compositional Convolutional Neural Networks: A Deep Architecture with Innate Robustness to Partial Occlusion, Adam Kortylewski, Ju He, Qing Liu, Alan Yuille, \url{https://arxiv.org/abs/2003.04490}} proposed using vMF kernel on the feature maps from CNN based network to generate occlusion likelihood and thus detect occlusions followed by classification ignoring these occluded features. \\
+
+
+\newpage
+\section{CS 335: Feed Forward Networks}
+Completed all functions and classes present in the notebook with proper comments. \\
+
+The choice for the network, epochs, learning rate, loss function, batch size was done by using function \verb!train_validate()! which calculated error and accuracy in prediction on training and validation dataset for every epoch. This analysis helped prevent the network from over-fitting to the training data provided. \\
+
+The final weights are stored in \verb!./models/mnist_weights.pkt! and \verb!./models/flowers_weights.pkt! after training on the entire training dataset provided to us. \\
 
 
 
