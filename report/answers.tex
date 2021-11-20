@@ -14,7 +14,7 @@
 \usepackage[export]{adjustbox}
 \usepackage{sectsty}
 \usepackage{enumitem}
-\renewcommand{\thesubsubsection}{(\roman{subsubsection})}
+\renewcommand{\thesubsubsection}{(\arabic{subsubsection})}
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage[perpage]{footmisc}
@@ -45,7 +45,83 @@
 \setcounter{page}{0}
 
 \newpage
-~
+\section{CS 337: Directed Graphical models}
+\subsection{D-Separation}
+\textbf{(a) $C \perp B$ ?} \\
+No - $CAB$ is not blocked. \\
+
+\textbf{(b) $C \perp B \vert A$ ?} \\
+Yes - $CAB$ is now blocked and all other paths have a Head-Head node which isn't $A$. \\
+
+\textbf{(c) $C \perp B \vert A, J$ ?} \\
+No - $CDGB$ is now not blocked as descendent of Head-Head node $G$ is $J$. \\
+
+\textbf{(d) $C \perp B \vert A, J, D$?} \\
+Yes - $CDGB$ is now blocked because of $D$. \\
+
+\textbf{(e) $C \perp G$ ?} \\
+No - $CABG$ and $CDG$ are not blocked. \\
+
+\textbf{(f) $C \perp G \vert B$ ?} \\
+No - $CDG$ is not blocked. \\
+
+\textbf{(g) $C \perp G \vert B, D$ ?} \\
+Yes - $CABG$ and $CDG$ are now blocked and all other paths have a Head-Head node. \\
+
+\textbf{(h) $C \perp G \vert B, D, H$ ?} \\
+No - $CEHFG$ is now not blocked as Head-Head node is $H$. \\
+
+\textbf{(i) $C \perp G \vert B, D, H, E$ ?} \\
+Yes - $CEHFG$ is now blocked because of $E$. \\
+
+\textbf{(j) $B \perp I \vert J$ ?} \\
+No - $BGFI$ is not blocked as descendent of Head-Head node $G$ is $J$. \\
+
+
+\subsection{Probability distribution}
+\begin{equation*}
+    \begin{aligned}
+        \mathbb{P}(A, \cdots, J) & = \prod_X \mathbb{P}(X | \text{parents of }X)                                                                                                                           \\
+                                 & = \mathbb{P}(A) \mathbb{P}(B|A) \mathbb{P}(C|A) \mathbb{P}(D|A) \mathbb{P}(E|C) \mathbb{P}(F|D) \mathbb{P}(G|B,D,F) \mathbb{P}(H|E,F) \mathbb{P}(I|F) \mathbb{P}(J|F,G)
+    \end{aligned}
+\end{equation*}
+
+
+\newpage
+\subsection{Number of parameters required to learn the probability distribution}
+Except for $H, I$, all conditional probability terms would require $2^{\# \text{Parents}}$ parameters. \\
+Conditional probability term for $I$ would require zero parameter as $P(I=1|F=1) = 1$ and $P(I=1|F=0) = 0$. Similarly, conditional probability term for $H$ would require zero parameter. \\
+
+\hspace{2em}
+\begin{tabular}{||c|c||}
+    \hline
+    Prob. distribution                & \# Parameters \\
+    \hline
+    \hline
+    $\mathbb{P}(A)$                   & 1             \\
+    \hline
+    $\mathbb{P}(B|A)$                 & 2             \\
+    \hline
+    $\mathbb{P}(C|A)$                 & 2             \\
+    \hline
+    $\mathbb{P}(D|A)$                 & 2             \\
+    \hline
+    $\mathbb{P}(E|C)$                 & 2             \\
+    \hline
+    $\mathbb{P}(F|D)$                 & 2             \\
+    \hline
+    $\mathbb{P}(G|B,D,F)$             & 8             \\
+    \hline
+    $\mathbb{P}(H|E,F)$               & 0             \\
+    \hline
+    $\mathbb{P}(I|F)$                 & 0             \\
+    \hline
+    $\mathbb{P}(J|F,G)$               & 4             \\
+    \hline
+    $\mathbb{P}(A,B,C,D,E,F,G,H,I,J)$ & 23            \\
+    \hline
+\end{tabular}
+
 
 
 \end{document}
